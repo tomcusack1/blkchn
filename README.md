@@ -20,6 +20,14 @@ generate concensus over the new blocks to append to the Blockchain.
 
 `conda build .`
 
+# Running Application
+
+`python3 blockchain.py`
+
+`python3 blockchain.py -p 5001`
+
+`python3 blockchain.py --port 5002`
+
 # Running Tests
 
 Run:
