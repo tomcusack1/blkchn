@@ -32,8 +32,8 @@ class Blockchain:
             None: If successful, else raises a ValueError
 
         """
-
         parsed_url = urlparse(address)
+
         if parsed_url.netloc:
             self.nodes.add(parsed_url.netloc)
         elif parsed_url.path:
@@ -46,7 +46,7 @@ class Blockchain:
         """Determines if a given blockchain is valid
 
         Args:
-          chain (list): A list of dictionaries (blocks) making up a blockchain
+          chain (dict): A list of dictionaries (blocks) making up a blockchain
 
         Returns:
             bool: True if valid, False if not
@@ -58,15 +58,14 @@ class Blockchain:
 
         while current_index < len(chain):
             block = chain[current_index]
-
-            # Check that the hash of the block is correct
             last_block_hash = self.hash(last_block)
 
             if block['previous_hash'] != last_block_hash:
+                # Check that the hash of the block is correct
                 return False
 
-            # Check that the Proof of Work is correct
             if not self.valid_proof(last_block['proof'], block['proof'], last_block_hash):
+                # Check that the Proof of Work is correct
                 return False
 
             last_block = block
