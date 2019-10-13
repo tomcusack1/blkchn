@@ -6,6 +6,6 @@ A Python implementation of a Blockchain data structure.
 
 Create a new Conda environment
 
-`conda create -n blockchain`
+`conda create -n blkchn`
 
 `python setup.py install develop`
