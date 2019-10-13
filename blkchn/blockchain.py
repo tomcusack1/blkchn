@@ -12,14 +12,13 @@ class Blockchain:
       current_transactions (list): A list of all the pending transactions
       chain (list): A record of all the blocks within the Blockchain
       nodes (set): A unique collection of all connected nodes (e.g. http://192.168.0.5:5000)
-      new_block (list): Creates a new Blockchain by making the Genesis Block
 
     """
     def __init__(self):
         self.current_transactions = list()
         self.chain = list()
         self.nodes = set()
-        self.new_block(previous_hash='1', proof=100)  # Genesis Block
+        self.new_block(previous_hash='1', proof=100)
 
     def register_node(self, address):
         """Adds a new node to the list of nodes
@@ -51,7 +50,6 @@ class Blockchain:
             bool: True if valid, False if not
 
         """
-
         last_block = chain[0]
         current_index = 1
 
@@ -81,12 +79,9 @@ class Blockchain:
             bool: True if our chain was replaced, False if not
 
         """
-
         neighbours = self.nodes
         new_chain = None
-
-        # We're only looking for chains longer than ours
-        max_length = len(self.chain)
+        max_length = len(self.chain)  # We're only looking for chains longer than ours
 
         # Grab and verify the chains from all the nodes in our network
         for node in neighbours:
@@ -101,7 +96,7 @@ class Blockchain:
                     max_length = length
                     new_chain = chain
 
-        # Replace our chain if we discovered a new, valid chain longer than ours
+        # Replace our chain if we have discovered a new, __valid chain__, longer than ours
         if new_chain:
             self.chain = new_chain
             return True
@@ -119,20 +114,16 @@ class Blockchain:
           dict: New Block
 
         """
-
-        block = {
+        self.current_transactions = []  # Reset the current list of transactions
+        self.chain.append({
             'index': len(self.chain) + 1,
             'timestamp': time(),
             'transactions': self.current_transactions,
             'proof': proof,
             'previous_hash': previous_hash or self.hash(self.chain[-1]),
-        }
+        })
 
-        # Reset the current list of transactions
-        self.current_transactions = []
-        self.chain.append(block)
-
-        return block
+        return self.chain[-1]
 
     def new_transaction(self, sender: str, recipient: str, amount: float) -> int:
         """Creates a new transaction to go into the next mined block
@@ -143,7 +134,7 @@ class Blockchain:
           amount (float): Amount
 
         Returns:
-          int: The index of the Block that will hold this transaction
+          int: The index of the block that will hold this transaction
 
         """
         self.current_transactions.append({'sender': sender, 'recipient': recipient, 'amount': amount})
@@ -151,7 +142,7 @@ class Blockchain:
         return self.last_block['index'] + 1
 
     @property
-    def last_block(self):
+    def last_block(self) -> dict:
         """Returns the last block on the blockchain."""
 
         return self.chain[-1]
@@ -186,12 +177,9 @@ class Blockchain:
           int: The proof of work
 
         """
-
-        last_proof = last_block['proof']
-        last_hash = self.hash(last_block)
         proof = 0
 
-        while self.valid_proof(last_proof, proof, last_hash) is False:
+        while not self.valid_proof(last_proof=last_block['proof'], proof=proof, last_hash=self.hash(last_block)):
             proof += 1
 
         return proof
