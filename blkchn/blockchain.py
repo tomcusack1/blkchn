@@ -6,17 +6,16 @@ from urllib.parse import urlparse
 
 
 class Blockchain:
+    """A Blockchain data structure.
 
+    Attributes:
+      current_transactions (list): A list of all the pending transactions
+      chain (list): A record of all the blocks within the Blockchain
+      nodes (set): A unique collection of all connected nodes (e.g. http://192.168.0.5:5000)
+      new_block (list): Creates a new Blockchain by making the Genesis Block
+
+    """
     def __init__(self):
-        """The constructor for the Blockchain class
-
-        Args:
-          current_transactions (list): A list of all the pending transactions
-          chain (list): A record of all the blocks within the Blockchain
-          nodes (set): A unique collection of all connected nodes (e.g. http://192.168.0.5:5000)
-          new_block (list): Creates a new Blockchain by making the Genesis Block
-
-        """
         self.current_transactions = list()
         self.chain = list()
         self.nodes = set()
