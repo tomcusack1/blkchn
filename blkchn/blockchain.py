@@ -125,13 +125,14 @@ class Blockchain:
 
         return self.chain[-1]
 
-    def new_transaction(self, sender: str, recipient: str, amount: float) -> int:
+    def new_transaction(self, sender: str, recipient: str, amount: float, quantity: float=-1.0) -> int:
         """Creates a new transaction to go into the next mined block
 
         Args:
           sender (str): Address of the Sender
           recipient (str): Address of the Recipient
-          amount (float): Amount
+          amount (float): The amount sent to the recipient
+          quantity (float): The number of items bought (defaults to -1.0 if not exchanging goods)
 
         Returns:
           int: The index of the block that will hold this transaction
@@ -141,6 +142,7 @@ class Blockchain:
                 'sender': sender,
                 'recipient': recipient,
                 'amount': amount,
+                'quantity': quantity,
                 'created_at': time()
             })
 
@@ -172,8 +174,7 @@ class Blockchain:
     def proof_of_work(self, last_block) -> int:
         """Proof of Work Algorithm
 
-         - Find a number p' such that hash(pp') contains leading 4 zeroes
-         - Where p is the previous proof, and p' is the new proof
+         Repeatedly hashes incrementing the nonce value until the hash has N zeros at the beginning.
 
         Args:
           last_block (dict): Last Block
