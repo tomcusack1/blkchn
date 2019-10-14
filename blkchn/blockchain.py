@@ -117,7 +117,7 @@ class Blockchain:
         self.current_transactions = []  # Reset the current list of transactions
         self.chain.append({
             'index': len(self.chain) + 1,
-            'timestamp': time(),
+            'created_at': time(),
             'transactions': self.current_transactions,
             'proof': proof,
             'previous_hash': previous_hash or self.hash(self.chain[-1]),
@@ -137,7 +137,12 @@ class Blockchain:
           int: The index of the block that will hold this transaction
 
         """
-        self.current_transactions.append({'sender': sender, 'recipient': recipient, 'amount': amount})
+        self.current_transactions.append({
+                'sender': sender,
+                'recipient': recipient,
+                'amount': amount,
+                'created_at': time()
+            })
 
         return self.last_block['index'] + 1
 
