@@ -17,12 +17,8 @@ def mine():
     proof = blockchain.proof_of_work(last_block)
 
     # We must receive a reward for finding the proof.
-    # The sender is "0" to signify that this node has mined a new coin.
-    blockchain.new_transaction(
-        sender="0",
-        recipient=node_identifier,
-        amount=1,
-    )
+    # The sender is `0` to signify that this node has mined a new coin.
+    blockchain.new_transaction({'sender': '0', 'recipient': node_identifier, 'amount': 1})
 
     # Forge the new Block by adding it to the chain
     previous_hash = blockchain.hash(last_block)
@@ -39,15 +35,25 @@ def mine():
 
 @app.route('/transactions/new', methods=['POST'])
 def new_transaction():
-    """Creates a new transaction."""
+    """Stores a new transaction within the current block.
+
+    Note:
+      As a developer, it is your responsibility to define a model and strictly adhere to it. Theoretically,
+      any dictionary can be stored into a block, but in practice, strict guard clauses should be implemented.
+
+    Returns:
+      201: On Creation
+      400: Invalid JSON sent to server
+
+    """
     values = request.get_json()
 
     if not all(k in values for k in ['sender', 'recipient', 'amount']):
         return 'Missing values', 400
 
-    index = blockchain.new_transaction(values['sender'], values['recipient'], values['amount'])
+    blockchain.new_transaction({'sender': values['sender'], 'recipient': values['recipient'], 'amount': values['amount']})
 
-    return jsonify({'message': f'Transaction will be added to Block {index}'}), 201
+    return '', 201
 
 
 @app.route('/chain', methods=['GET'])

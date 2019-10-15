@@ -125,26 +125,29 @@ class Blockchain:
 
         return self.chain[-1]
 
-    def new_transaction(self, sender: str, recipient: str, amount: float, quantity: float=-1.0) -> int:
+    def new_transaction(self, transaction: dict) -> int:
         """Creates a new transaction to go into the next mined block
 
+        The dictionary passed in can contain any data
+
         Args:
-          sender (str): Address of the Sender
-          recipient (str): Address of the Recipient
-          amount (float): The amount sent to the recipient
-          quantity (float): The number of items bought (defaults to -1.0 if not exchanging goods)
+          transaction (dict): A dictionary representation of a transaction
+
+        e.g.
+
+          {
+            'sender': sender,
+            'recipient': recipient,
+            'amount': amount,
+            'quantity': quantity,
+            'created_at': time()
+          }
 
         Returns:
           int: The index of the block that will hold this transaction
 
         """
-        self.current_transactions.append({
-                'sender': sender,
-                'recipient': recipient,
-                'amount': amount,
-                'quantity': quantity,
-                'created_at': time()
-            })
+        self.current_transactions.append(transaction)
 
         return self.last_block['index'] + 1
 
@@ -174,10 +177,10 @@ class Blockchain:
     def proof_of_work(self, last_block) -> int:
         """Proof of Work Algorithm
 
-         Repeatedly hashes incrementing the nonce value until the hash has N zeros at the beginning.
+        Repeatedly hashes incrementing the nonce value until the hash has N zeros at the beginning.
 
         Args:
-          last_block (dict): Last Block
+          last_block (dict): The last block to have been placed on the blockchain
 
         Returns:
           int: The proof of work
