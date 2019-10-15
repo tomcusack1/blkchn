@@ -9,6 +9,6 @@ setup(name='blkchn',
       packages=['blkchn'],
       license='MIT',
       url='https://github.com/tomcusack1/blkchn',
-      download_url='https://github.com/tomcusack1/blkchn/dist/blkchn-0.0.4.tar.gz',
+      download_url='https://github.com/tomcusack1/blkchn/archive/v0.0.4.tar.gz',
       description='Blockchain data structure',
       install_requires=['flask', 'requests'])
