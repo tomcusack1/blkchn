@@ -1,3 +1,5 @@
+[![Build Status](http://178.62.80.42:8081/job/blkchn/job/develop/2/badge/icon)](http://178.62.80.42:8081/job/blkchn/job/develop/2/)
+
 # Blkchn
 
 A Python implementation of a Blockchain data structure.
