@@ -1,7 +1,7 @@
 pipeline {
 
     agent {
-        label "jenkins-jx-base"
+        label "master"
     }
 
     environment {
