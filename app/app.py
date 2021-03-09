@@ -1,3 +1,4 @@
+from os import environ
 from uuid import uuid4
 
 from flask import Flask, jsonify, request
@@ -91,4 +92,4 @@ def consensus():
 
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=5000)
+    app.run(host='0.0.0.0', port=8080, debug=environ.get('DEBUG_MODE', True))
