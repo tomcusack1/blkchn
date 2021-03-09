@@ -40,6 +40,14 @@ First, build the Dockerfile and take note of the tag name when complete:
 
 `gcloud builds --project blkchn submit --tag gcr.io/blkchn/blkchn:latest .`
 
+Then, once your build has completed, you can apply your Kubernetes yaml to the cluster
+to pick up the latest image.
+
+`kubectl apply -f deployment/app.yaml`
+
+Finally, navigate to the URL shown in GCP to interact with the API. Some example API
+calls are outlined below.
+
 # API Example Usage
 
 Using the API to interact is quite straightforward. Below are some example commands
