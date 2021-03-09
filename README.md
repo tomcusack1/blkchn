@@ -40,6 +40,41 @@ First, build the Dockerfile and take note of the tag name when complete:
 
 `gcloud builds --project blkchn submit --tag gcr.io/blkchn/blkchn:latest .`
 
+# API Example Usage
+
+Using the API to interact is quite straightforward. Below are some example commands
+to demonstrate its usage:
+
+```python
+import json
+import requests
+
+# Step 1) Add new node to the network
+r= requests.post('http://localhost:8080/nodes/register',
+                 json={'nodes': ['192.168.1.8:8080']}).json()
+print(json.dumps(r, indent=2))
+
+# Step 2) Inspect the empty blockchains genesis block
+r = requests.get('http://localhost:8080/chain').json()
+print(json.dumps(r, indent=2))
+
+# Step 3) Alice sends Bob 10 of something.
+r = requests.post('http://localhost:8080/transactions/new',
+                  json={'sender': 'alice',
+                        'recipient': 'bob',
+                        'amount': 10})
+
+assert r.status_code == 201
+
+# Step 4) Inspect the transaction on the blockchain
+r = requests.get('http://localhost:8080/chain').json()
+print(json.dumps(r, indent=2))
+
+# Step 5) Mine the block
+r = requests.get('http://localhost:8080/mine').json()
+print(json.dumps(r, indent=2))
+```
+
 # License
 
 This project is licensed under the MIT License - see the LICENSE.md file for details

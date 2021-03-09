@@ -52,7 +52,11 @@ def new_transaction():
     if not all(k in values for k in ['sender', 'recipient', 'amount']):
         return 'Missing values', 400
 
-    blockchain.new_transaction({'sender': values['sender'], 'recipient': values['recipient'], 'amount': values['amount']})
+    blockchain.new_transaction({
+        'sender': values['sender'],
+        'recipient': values['recipient'],
+        'amount': values['amount']
+    })
 
     return '', 201
 
@@ -77,8 +81,8 @@ def register_nodes():
         blockchain.register_node(node)
 
     return jsonify({
-        'message': 'New nodes have been added',
-        'total_nodes': list(blockchain.nodes),
+        'message': 'New node added.',
+        'connected_nodes': list(blockchain.nodes),
     }), 201
 
 
