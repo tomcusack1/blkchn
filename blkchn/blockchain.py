@@ -2,7 +2,6 @@ from hashlib import sha256
 import json
 import requests
 from time import time
-from urllib.parse import urlparse
 
 
 class Blockchain:
@@ -11,7 +10,7 @@ class Blockchain:
     Attributes:
       current_transactions (list): A list of all the pending transactions
       chain (list): A record of all the blocks within the Blockchain
-      nodes (set): A unique collection of all connected nodes (e.g. http://192.168.0.5:5000)
+      nodes (set): A unique collection of all connected nodes (e.g. {192.168.0.5:5000})
 
     """
     def __init__(self):
@@ -20,27 +19,19 @@ class Blockchain:
         self.nodes = set()
         self.new_block(previous_hash='1', proof=100)
 
-    def register_node(self, address):
+    def register_node(self, address) -> None:
         """Adds a new node to the list of nodes
 
         Args:
-            address (str): Address of a node. E.g. 'http://192.168.0.5:5000'
+            address (str): Address of a node. E.g. '192.168.0.5:5000'
 
         Returns:
             None: If successful, else raises a ValueError
 
         """
-        parsed_url = urlparse(address)
+        self.nodes.add(address)
 
-        if parsed_url.netloc:
-            self.nodes.add(parsed_url.netloc)
-        elif parsed_url.path:
-            # Accepts an URL without scheme like '192.168.0.5:5000'.
-            self.nodes.add(parsed_url.path)
-        else:
-            raise ValueError('Invalid URL')
-
-    def valid_chain(self, chain):
+    def valid_chain(self, chain) -> bool:
         """Determines if a given blockchain is valid
 
         Args:
@@ -70,7 +61,7 @@ class Blockchain:
 
         return True
 
-    def resolve_conflicts(self):
+    def resolve_conflicts(self) -> bool:
         """The consensus algorithm
 
         Resolves conflicts by replacing the chain with the longest one in the network.
