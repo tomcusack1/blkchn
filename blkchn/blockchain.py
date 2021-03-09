@@ -1,7 +1,11 @@
 from hashlib import sha256
 import json
+import logging
 import requests
 from time import time
+
+
+logging.basicConfig(level=logging.DEBUG)
 
 
 class Blockchain:
@@ -19,7 +23,7 @@ class Blockchain:
         self.nodes = set()
         self.new_block(previous_hash='1', proof=100)
 
-    def register_node(self, address) -> None:
+    def register_node(self, address: str) -> None:
         """Adds a new node to the list of nodes
 
         Args:
@@ -29,9 +33,10 @@ class Blockchain:
             None: If successful, else raises a ValueError
 
         """
+        logging.info(f'Adding `{address}` to registered nodes list.')
         self.nodes.add(address)
 
-    def valid_chain(self, chain) -> bool:
+    def valid_chain(self, chain: dict) -> bool:
         """Determines if a given blockchain is valid
 
         Args:
@@ -50,14 +55,18 @@ class Blockchain:
 
             if block['previous_hash'] != last_block_hash:
                 # Check that the hash of the block is correct
+                logging.critical('Previous hash does not equal the last blocks hash!')
                 return False
 
             if not self.valid_proof(last_block['proof'], block['proof'], last_block_hash):
                 # Check that the Proof of Work is correct
+                logging.critical('The last blocks hash is malformed. The blockchain is corrupt.')
                 return False
 
             last_block = block
             current_index += 1
+
+        logging.info('Success. Chain is valid.')
 
         return True
 
@@ -76,6 +85,7 @@ class Blockchain:
 
         # Grab and verify the chains from all the nodes in our network
         for node in neighbours:
+            logging.info(f'Fetching chain from: {node}')
             response = requests.get(f'http://{node}/chain')
 
             if response.status_code == 200:
@@ -90,6 +100,7 @@ class Blockchain:
         # Replace our chain if we have discovered a new, __valid chain__, longer than ours
         if new_chain:
             self.chain = new_chain
+            logging.warning('Replacing chain with a newer, longer, valid chain.')
             return True
 
         return False
@@ -105,7 +116,7 @@ class Blockchain:
           dict: New Block
 
         """
-        self.current_transactions = []  # Reset the current list of transactions
+        self.current_transactions = list()  # Reset the current list of transactions
         self.chain.append({
             'index': len(self.chain) + 1,
             'created_at': time(),
@@ -113,6 +124,8 @@ class Blockchain:
             'proof': proof,
             'previous_hash': previous_hash or self.hash(self.chain[-1]),
         })
+
+        logging.info('Success. New block created.')
 
         return self.chain[-1]
 
@@ -139,6 +152,8 @@ class Blockchain:
 
         """
         self.current_transactions.append(transaction)
+
+        logging.info('Success. New transaction created.')
 
         return self.last_block['index'] + 1
 

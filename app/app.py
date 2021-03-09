@@ -1,4 +1,5 @@
 from os import environ
+import logging
 from uuid import uuid4
 
 from flask import Flask, jsonify, request
@@ -7,6 +8,7 @@ from blkchn import Blockchain
 
 
 app = Flask(__name__)
+logging.basicConfig(level=logging.DEBUG)
 node_identifier = str(uuid4()).replace('-', '')
 blockchain = Blockchain()
 
