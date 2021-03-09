@@ -1,0 +1,30 @@
+apiVersion: apps/v1beta2
+kind: Deployment
+metadata:
+  name: blkchn
+  labels:
+    name: blkchn
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      name: blkchn
+  template:
+    metadata:
+      name: blkchn
+      labels:
+        name: blkchn
+    spec:
+      containers:
+        - name: blkchn
+          image: gcr.io/blkchn/blkchn:latest
+          ports:
+            - containerPort: 8080
+          resources:
+            requests:
+              memory: 256Mi
+            limits:
+              memory: 512Mi
+          env:
+            - name: DEBUG_MODE
+              value: False
