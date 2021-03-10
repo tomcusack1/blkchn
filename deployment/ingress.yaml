@@ -1,0 +1,8 @@
+apiVersion: networking.k8s.io/v1beta1
+kind: Ingress
+metadata:
+  name: blkchn-ingress
+spec:
+  backend:
+    serviceName: blkchn-svc
+    servicePort: 8080

@@ -40,12 +40,29 @@ First, build the Dockerfile and take note of the tag name when complete:
 
 `gcloud builds --project blkchn submit --tag gcr.io/blkchn/blkchn:latest .`
 
+If you don't have a cluster created, then do this now:
+
+```
+gcloud container clusters create blkchn-cluster \
+    --zone us-west1-a \
+    --node-locations us-west1-a \
+    --machine-type=e2-small \
+    --max-nodes=1 \
+    --enable-basic-auth \
+    --issue-client-certificate \
+    --num-nodes=1
+```
+
 Then, once your build has completed, you can apply your Kubernetes yaml to the cluster
 to pick up the latest image.
 
 `kubectl apply -f deployment/app.yaml`
 
-Finally, navigate to the URL shown in GCP to interact with the API. Some example API
+`kubectl apply -f deployment/service.yaml`
+
+`kubectl apply -f deployment/ingress.yaml`
+
+Finally, navigate to the external IP outputted by `kubectl get ingress blkchn-ingress`. Some example API
 calls are outlined below.
 
 # API Example Usage
@@ -82,6 +99,12 @@ print(json.dumps(r, indent=2))
 r = requests.get('http://localhost:8080/mine').json()
 print(json.dumps(r, indent=2))
 ```
+
+# Running Tests
+
+You can run the test suite by running the below command in the root of the module:
+
+`python3 -m unittest`
 
 # License
 

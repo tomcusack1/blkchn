@@ -3,7 +3,7 @@ import setuptools
 
 
 setup(name='blkchn',
-      version='0.0.5',
+      version='0.0.6',
       author='Tom Cusack-Huang',
       author_email='tom@cusack-huang.com',
       packages=['blkchn'],
